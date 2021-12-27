@@ -19,18 +19,7 @@ services:
             - letsencrypt:/etc/letsencrypt
             - nextcloud:/var/www/html
         restart: unless-stopped
-
-    db:
-        image: mariadb
-        environment:
-            - MYSQL_ROOT_PASSWORD=Password1234!@
-            - MYSQL_PASSWORD=Password1234!@
-            - MYSQL_DATABASE=nextcloud
-            - MYSQL_USER=nextcloud
-        volumes: 
-            - ./mysql:/var/lib/mysql
-        restart: unless-stopped
-    
+   
     app:
         image: nextcloud:fpm
         volumes:
