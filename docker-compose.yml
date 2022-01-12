@@ -46,6 +46,11 @@ services:
             - MYSQL_PASSWORD=secretpassword
             - MYSQL_HOST=db
             - REDIS_HOST=redis
+            - OBJECTSTORE_S3_HOST=s3.eu-central-1.aws.com
+            - OBJECTSTORE_S3_BUCKET=files.knowlton.dev
+            - OBJECTSTORE_S3_KEY=
+            - OBJECTSTORE_S3_SECRET=
+            - OBJECTSTORE_S3_REGION=us-east-1
         volumes:
             - nextcloud:/var/www/html
             - ./app/data:/var/www/html/data
