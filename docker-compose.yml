@@ -3,6 +3,10 @@ version: '3'
 volumes:
     letsencrypt:
     nextcloud:
+    redis:
+
+networks:
+    nextcloud:
 
 services:
     proxy:
@@ -23,8 +27,8 @@ services:
     db:
         image: mariadb
         environment:
-            - MYSQL_ROOT_PASSWORD=/run/secrets/mysql_password
-            - MYSQL_PASSWORD=/run/secrets/mysql_password
+            - MYSQL_ROOT_PASSWORD=secretpassword
+            - MYSQL_PASSWORD=secretpassword
             - MYSQL_DATABASE=nextcloud
             - MYSQL_USER=nextcloud
         volumes:
@@ -39,7 +43,7 @@ services:
         environment:
             - MYSQL_DATABASE=nextcloud
             - MYSQL_USER=nextcloud
-            - MYSQL_PASSWORD=/run/secrets/mysql_password
+            - MYSQL_PASSWORD=secretpassword
             - MYSQL_HOST=db
             - REDIS_HOST=redis
         volumes:
@@ -48,24 +52,8 @@ services:
             - ./app/config:/var/www/html/config
         restart: unless-stopped
 
-    cron:
-        image: rcdailey/nextcloud-cronjob
-        environment:
-            - NEXTCLOUD_CRON_MINUTE_INTERVAL=15
-            - NEXTCLOUD_CONTAINER_NAME=app
-            - NEXTCLOUD_PROJECT_NAME=nextcloud
-        volumes:
-            - /var/run/docker.sock:/var/run/docker.sock:ro
-            - /etc/localtime:/etc/localtime:ro
-        restart: always
-
     redis:
-      image: redis:latest
-      restart: always
-      networks:
-          - nextcloud
-      volumes:
-          - redis:/var/lib/redis
-
-secrets:
-    file: ./mysql_password
+        image: redis:latest
+        restart: always
+        volumes:
+            - redis:/var/lib/redis
